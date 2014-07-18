@@ -57,7 +57,8 @@ Capistrano::Configuration.instance.load do
         args.push '--daemon'
       end
 
-      run "/bin/bash -l -c 'if [ -d #{current_path} ] && [ ! -f #{pid_file} ]; then cd #{current_path} ; #{fetch(:sidekiq_cmd)} #{args.compact.join(' ')} ; else echo \\\\'Sidekiq is already running\\\\'; fi'", pty: false
+      puts "/bin/bash -l -c 'if [ -d #{current_path} ] && [ ! -f #{pid_file} ]; then cd #{current_path} ; #{fetch(:sidekiq_cmd)} #{args.compact.join(' ')} ; else echo \\\\'Sidekiq is already running\\\\'; fi'"
+      run "if [ -d #{current_path} ] && [ ! -f #{pid_file} ]; then cd #{current_path} ; #{fetch(:sidekiq_cmd)} #{args.compact.join(' ')} ; else echo 'Sidekiq is already running'; fi", pty: false
     end
 
     desc 'Quiet sidekiq (stop accepting new work)'
